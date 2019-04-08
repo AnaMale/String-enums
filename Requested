@@ -1,0 +1,14 @@
+namespace Domain.Interface.Enum
+{
+    using Domain.Interface.Core;
+
+    public sealed class Requested : StringEnum<Requested>
+    {
+        public static Requested Person1 => GetInstance("Person1");
+
+        public static Requested Person2 => GetInstance("Person2");
+        
+        public static Requested Person3 => GetInstance("Person3");
+        
+    }
+}
