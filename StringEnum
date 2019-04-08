@@ -1,0 +1,24 @@
+namespace Domain.Interface.Core
+{
+#pragma warning disable CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
+#pragma warning disable CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
+    public abstract class StringEnum<TEnum>
+#pragma warning restore CS0661 // Type defines operator == or operator != but does not override Object.GetHashCode()
+#pragma warning restore CS0660 // Type defines operator == or operator != but does not override Object.Equals(object o)
+        where TEnum : StringEnum<TEnum>, new()
+    {
+        protected StringEnum()
+        {
+        }
+
+        public string Value { get; protected set; }
+
+        public static bool operator !=(StringEnum<TEnum> v1, StringEnum<TEnum> v2) => v1?.Value != v2?.Value;
+
+        public static bool operator ==(StringEnum<TEnum> v1, StringEnum<TEnum> v2) => v1?.Value == v2?.Value;
+
+        public static TEnum GetInstance(string value) => new TEnum { Value = value };
+
+        public override string ToString() => this.Value;
+    }
+}
