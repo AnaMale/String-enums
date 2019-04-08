@@ -1,0 +1,49 @@
+namespace Domain.Interface.Core
+{
+    using System;
+    using Newtonsoft.Json;
+
+    public class StringEnumConverter : JsonConverter
+    {
+        private readonly Type enumType;
+
+        public StringEnumConverter(Type enumType) => this.enumType = enumType;
+
+        public override bool CanConvert(Type objectType) => objectType == this.enumType;
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            try
+            {
+                if (reader.TokenType == JsonToken.String)
+                {
+                    var enumText = reader.Value.ToString();
+
+                    if (enumText?.Length == 0)
+                    {
+                        return null;
+                    }
+
+                    return objectType.BaseType.GetMethod("GetInstance").Invoke(null, new object[] { enumText });
+                }
+            }
+            catch
+            {
+                return null;
+            }
+
+            return null;
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            if (value == null)
+            {
+                writer.WriteNull();
+                return;
+            }
+
+            writer.WriteValue(value.ToString());
+        }
+    }
+}
